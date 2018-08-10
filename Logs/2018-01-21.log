@@ -1,0 +1,1 @@
+2018-01-21 15:16:57.993  SQLDBhelper: 执行SQL出错：SQL：select count(*) from (select f.keyid,f.filename,f.keyword,f.localdir,f.status,f.createtime,u.username from fileinfo f,userinfo u where f.userid=u.keyid) where username like '%程%'

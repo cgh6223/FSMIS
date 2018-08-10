@@ -1,0 +1,3 @@
+2018-01-24 13:57:26.280  SQLDBhelper: 执行SQL出错：SQL：select from userinfo u,viewinfo v where u.keyid=v.userid and v.fileid='2'
+2018-01-24 14:01:30.482  SQLDBhelper: 执行SQL出错：SQL：select from userinfo u,viewinfo v where u.keyid=v.userid and v.fileid='6'
+2018-01-24 15:08:42.852  SQLDBhelper: 执行SQL出错：SQL：select from userinfo u,viewinfo v where u.keyid=v.userid and v.fileid='2'

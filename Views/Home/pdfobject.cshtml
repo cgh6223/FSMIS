@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <title>pdfobject</title>
+
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/index.css">
+    <script type="text/javascript" src="~/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery.easyui.min.js"></script>
+
+
+    <script src="~/Scripts/pdfobject.js"></script>
+    <script type="text/javascript" src="~/scripts/js/zsign/jquery.zsign.js"></script>
+    <script type="text/javascript" src="~/scripts/js/zsign/jQuery.print.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/scripts/js/zsign/jquery.zsign.css">
+    <style type="text/css">
+        .pdfobject-container {
+            height: 99%;
+        }
+
+        .pdfobject {
+            border: 1px solid #666;
+        }
+    </style>
+</head>
+<body>
+    <div>
+       <div style="position:absolute;top:420px;left:680px;background-image:url(/scripts/js/zsign/1.png);z-index:999;width:200px;height:200px;"></div>
+
+    </div>
+    <div class="easyui-panel" data-options="fit:true,title:''">
+    <div id="view"></div>
+        </div>
+    <script type="text/javascript">
+        var url = "@ViewBag.fileid";
+        var mode = "@ViewBag.mode";
+
+        var options = {
+            pdfOpenParams: {
+                navpanes: 0,
+                toolbar: 0,
+                statusbar: 0,
+                view: "FitV",
+                pagemode: "thumbs",
+                page: 2
+            },
+            forcePDFJS: true,
+            PDFJS_URL: "http://192.168.50.54:8081/generic/web/viewer.html"
+        };
+        if (mode == "2") {
+            window.location.href = url;
+            
+        } else {
+            PDFObject.embed(url, "#view", options);
+        }
+
+        $("#view").zSign({ img: '/scripts/js/zsign/1.png', isPercentage: true });
+    </script>
+</body>
+</html>

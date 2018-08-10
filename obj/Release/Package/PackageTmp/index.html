@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>登录界面</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    
+ 
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
+    <style>
+        body {
+            color: #fff;
+            font-family: "微软雅黑";
+            font-size: 14px;
+            text-align:center
+        }
+
+        .container {
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+       
+        .text-center {
+            text-align:center
+        }
+        .wrap1 {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto
+        }
+        /*把整个屏幕真正撑开--而且能自己实现居中*/
+        .main_content {
+            background: url(images/main_bg.png) repeat;
+            margin-left: auto;
+            margin-right: auto;           
+            float: none;
+            border-radius: 8px;
+            width:400px;
+            text-align:center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+            text-align:center;
+        }
+
+      
+
+        .login_btn {
+            display: block;
+            background: #3872f6;
+            color: #fff;
+            font-size: 15px;
+            width: 98%;
+            line-height: 50px;
+            border-radius: 3px;
+            border: none;
+          margin:0 auto;
+        }
+
+        .login_input {
+            width: 100%;
+            border: 1px solid #3872f6;
+            border-radius: 3px;
+            line-height: 40px;
+            padding-left:12px;
+            background: none;
+            color: white;
+           height:40px;
+            margin:0 auto;
+        }
+
+        .icon_font {
+            position: absolute;
+            bottom: 15px;
+            left: 10px;
+            font-size: 18px;
+            color: #3872f6;
+        }
+
+        .font16 {
+            font-size: 16px;
+        }
+
+        .mg-t20 {
+            margin-top: 20px;
+        }
+
+        @media (min-width:200px) {
+            .pd-xs-20 {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width:768px) {
+            .pd-sm-50 {
+                padding: 50px;
+            }
+        }
+
+        #grad {
+            background: -webkit-linear-gradient(#4990c1, #52a3d2, #6186a3); /* Safari 5.1 - 6.0 */
+            background: -o-linear-gradient(#4990c1, #52a3d2, #6186a3); /* Opera 11.1 - 12.0 */
+            background: -moz-linear-gradient(#4990c1, #52a3d2, #6186a3); /* Firefox 3.6 - 15 */
+            background: linear-gradient(#4990c1, #52a3d2, #6186a3); /* 标准的语法 */
+        }
+    </style>
+    <script language="javascript">
+        function goLogin() {
+
+            var loginName = $("#Email1").val();
+            var pwd = $("#Password1").val();
+            if (loginName == "" || pwd == "") {
+                alert("用户名或密码不能为空");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/home/login?name=" + loginName + "&pwd=" + pwd,
+                success: function (data) {
+                    if (data.sucess == false) {
+                        alert("用户名或密码错误");
+                    } else {
+                        location.href = "/home/Index";
+                    }
+                }
+
+            })
+        }
+    </script>
+</head>
+
+<body style="background:url(images/bg.jpg) no-repeat;">
+    
+    <div class="container wrap1" style="height:450px;">
+            <h2 class="text-center">高科中环文件管理系统</h2>
+            <div class="pd-sm-50  main_content">
+                <p class="text-center font16">用户登录</p>
+               
+                    <div class="form-group mg-t20">
+                       
+                        <input class="login_input" id="Email1" placeholder="请输入用户名" />
+                    </div>
+                    <div class="form-group mg-t20">
+                        
+                        <input type="password" class="login_input" id="Password1" placeholder="请输入密码" />
+                    </div>
+                    <div class="checkbox mg-b25">
+                        <!-- <label>
+         <input type="checkbox" />记住我的登录信息
+     </label>-->
+                    </div>
+                    <button  class="login_btn" onclick="goLogin()">登 录</button>
+               
+        </div><!--row end-->
+    </div><!--container end-->     
+</body>
+</html>

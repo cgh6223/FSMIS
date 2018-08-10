@@ -1,0 +1,421 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/index.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/portal.css">
+    <script type="text/javascript" src="~/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery.easyui.min.js"></script>
+    <!--easyui_portal-->
+    <script type="text/javascript" src="~/scripts/jquery.portal.js"></script>
+    <!--zTree-->
+    <script type="text/javascript" src="~/Scripts/zTree/jquery.ztree.core-3.5.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/zTree/jquery.ztree.excheck-3.5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/scripts/zTree/zTreeStyle.css">
+   
+    <link rel="stylesheet" type="text/css" href="~/css/common.css" />
+    <style>
+        .mypan {
+            background: -webkit-gradient(linear, 0 0, 100% 100%, from(#2EA7E0), to(#75C7EE));
+            border: none !important;
+        }
+
+            .mypan .panel-title {
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 24px;
+                text-align: center;
+                color: white;
+                border: none !important;
+            }
+    </style>
+</head>
+<body class="easyui-layout" data-options="fit:true">
+    <div class="easyui-layout" style="width:98%;height:92%;margin:0 auto">
+        <div data-options="region:'north'" style="height:10%; border:none;font-family:'Comic Sans MS';padding-top:1.5%">
+            <div class="topHeaderLeft">文件管理系统</div>
+            <div class="topHeaderRight">
+                <div class="times">这里是时间</div>
+                <div class="toolsNav">                    
+                    <span >@ViewBag.Name </span><span>欢迎您！</span>
+                    <a href="#" class="easyui-menubutton" data-options="menu:'#mm1',iconCls:'icon-edit'">控制面板</a>
+                    <a href="~/Index.html" class="easyui-linkbutton" data-options="plain:true">退出</a>
+
+
+                    <div id="mm1" style="width:150px;">
+
+                        <div data-options="iconCls:'icon-redo'" onclick="ModifyPwd()">密码修改</div>
+                        <div class="menu-sep"></div>
+                        <div data-options="iconCls:'icon-undo'" onclick="addTab('文件查询','/home/FindFile')">文件查询</div>
+                    </div>
+
+
+                </div>
+            </div>
+          
+        </div>
+        <div data-options="region:'south',border:false" style="height:30px;text-align:center;padding-top:10px">
+            技术支持： <a href="#">中环公司</a>
+        </div>
+        <div data-options="region:'west',split:false,headerCls:'mypan',collapsible:false" title="我的目录" style="width:10%">
+            <div class="easyui-panel" title=" " data-options="closable:false,collapsible:false,fit:true,tools:'#tt',headerCls:'mypan'">
+                <div id="tt">
+                    <a href="#" class="icon-add" onclick="javascript:addDir()"></a>
+                    <a href="#" class="icon-edit" onclick="javascript:editDir()"></a>
+                </div>
+                <ul id="treeDemo" class="ztree"></ul>
+            </div>
+        </div>
+        <div data-options="region:'center'">
+            <div id="tab-tool">
+                <a href="#" class="easyui-linkbutton easyui-tooltip" title="关闭所有" plain="true" iconCls="icon-cancel" border="false" onclick="closeAll()"></a>
+              
+                <a href="#" class="easyui-linkbutton easyui-tooltip" title="刷新" plain="true" iconCls="icon-reload"></a>
+                <a href="#" onclick="gohome()" class="easyui-linkbutton easyui-tooltip" title="工作台" plain="true" iconCls="icon-house"></a>
+            </div>
+            <div id="tabs" class="easyui-tabs" data-options="fit:true,tabPosition:'bottom',tools:'#tab-tool'">
+                <div title="工作台" data-options="fit:true,iconCls:'icon-house'">
+                    <div id="pp" style="position:relative">
+                        <div style="width:30%;"></div>
+                        <div style="width:30%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>  
+    
+    <script language="javascript">
+        
+        var panels = [
+            {
+                id: 'p1', title: '工程部', height: 300, collapsible: true, headerCls: 'portalPanelNav', href: '/home/ShowList?deptid=1'
+            },
+            { id: 'p2', title: '综合计划部', height: 300, width: '90%', collapsible: true, headerCls: 'portalPanelNav', href: '/home/ShowList2?deptid=4' },
+            { id: 'p3', title: '市场部', height: 300, width: '90%', collapsible: true, headerCls: 'portalPanelNav', href: '/home/ShowList3?deptid=3' },
+            { id: 'p4', title: '办公室', height: 300, width: '90%', collapsible: true, headerCls: 'portalPanelNav', href: '/home/ShowList4?deptid=5' }
+
+        ];
+        var treeObj;
+        var addHtmlUrl = '/Scripts/Js/html/TreeNode_add.html';  
+        var modifyUrl = '/Scripts/Js/html/ModifyPwd.html'; 
+        function addDir() {
+            if (treeObj.getSelectedNodes()[0]) {
+                var p = $("<div>/").appendTo("body");
+                var addDia = p.dialog({
+                    title: '添加',
+                    width: 400,
+                    height: 120,
+                    modal: true,
+                    href: addHtmlUrl,
+                    onLoad: function () {                       
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: function () {
+                            if ($("#FMCGForm").form("validate")) {
+                                $.ajax({
+                                    type: "POST",
+                                    dataType: "json",
+                                    url: "/Home/TreeOP",
+                                    data: { filename: $("#filename").val(), pid: treeObj.getSelectedNodes()[0].id,option: "add" },
+                                    success: function (data) {
+                                        if (data.sucess) {
+                                            parent.showTip("更新成功！");
+                                            var newNode = { name: $("#filename").val() };
+                                            treeObj.addNodes(treeObj.getSelectedNodes()[0], newNode);
+                                            addDia.dialog('destroy');
+                                        } else {
+                                            parent.showTip("更新失败！");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            addDia.dialog('destroy');
+                        }
+                    }]
+
+                })
+
+                //newNode.checked = treeObj.getSelectedNodes()[0].checked;
+                //treeObj.addNodes(treeObj.getSelectedNodes()[0], newNode);
+            } else {
+                showTip("请先选择一个父结点！");
+            }
+        }
+        function editDir() {
+            if (treeObj.getSelectedNodes()[0]) {
+                var p = $("<div>/").appendTo("body");
+                var addDia = p.dialog({
+                    title: '修改',
+                    width: 400,
+                    height: 120,
+                    modal: true,
+                    href: addHtmlUrl,
+                    onLoad: function () {
+                        $("#filename").val(treeObj.getSelectedNodes()[0].name);
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: function () {
+                            if ($("#FMCGForm").form("validate")) {
+                                $.ajax({
+                                    type: "POST",
+                                    dataType: "json",
+                                    url: "/Home/TreeOP",
+                                    data: { filename: $("#filename").val(), pid: treeObj.getSelectedNodes()[0].id, option: "update" },
+                                    success: function (data) {
+                                        if (data.sucess) {
+                                            parent.showTip("更新成功！");
+                                           // var newNode = { name: $("#filename").val() };
+                                            //treeObj.addNodes(treeObj.getSelectedNodes()[0], newNode);
+                                            getTree();
+                                            treeObj.expandAll(true);
+                                            addDia.dialog('destroy');
+                                        } else {
+                                            parent.showTip("更新失败！");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            addDia.dialog('destroy');
+                        }
+                    }]
+
+                })
+
+                //newNode.checked = treeObj.getSelectedNodes()[0].checked;
+                //treeObj.addNodes(treeObj.getSelectedNodes()[0], newNode);
+            } else {
+                showTip("请先选择一个父结点！");
+            }
+        }
+
+        function ModifyPwd() {
+            
+                var p = $("<div>/").appendTo("body");
+                var addDia = p.dialog({
+                    title: '密码修改',
+                    width: 400,
+                    height: 220,
+                    modal: true,
+                    href: modifyUrl,
+                    onLoad: function () {
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: function () {
+                            if ($("#FMCGForm").form("validate")) {
+                                $.ajax({
+                                    type: "POST",
+                                    dataType: "json",
+                                    url: "/Home/ModifyPwd",
+                                    data: { pwd: $("#pwd").val(), npwd: $("#npwd").val(), nrpwd: $("#nrpwd").val()},
+                                    success: function (data) {
+                                        if (data.sucess) {
+                                            parent.showTip("更新成功！");
+                                           
+                                            addDia.dialog('destroy');
+                                        } else {
+                                            parent.showTip("原密码错误！");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            addDia.dialog('destroy');
+                        }
+                    }]
+
+                })
+
+                //newNode.checked = treeObj.getSelectedNodes()[0].checked;
+                //treeObj.addNodes(treeObj.getSelectedNodes()[0], newNode);
+          
+        }
+
+        function addTab(name, url) {
+            if ($("#tabs").tabs('exists', name)) {              
+                $("#tabs").tabs('select', name);            
+               
+            } else {
+                $("#tabs").tabs('add', {
+                    name: name,
+                    title: name,
+                    closable: true,
+                    content: '<iframe scrolling="auto" frameborder="0" src="' + url + '" style="width:100%;height:99%;"></iframe>'
+                });
+            }
+        }
+        function gohome() {
+            $("#tabs").tabs('select', 0); 
+            
+        }
+        function closeAll() {
+            $.getJSON("/home/mytest", function (data) {
+                alert(data.msg);
+            })
+           
+        }
+
+        function showTip(msg) {
+            $.messager.show({
+                title: '提示',
+                msg: msg,
+                showType: 'slide',
+                timeout: 2000
+            })
+        }
+
+        function getPanelOptions(id) {
+            for (var i = 0; i < panels.length; i++) {
+                if (panels[i].id == id) {
+                    return panels[i];
+                }
+            }
+            return undefined;
+        }
+
+        function getcookie(name) {
+            var cookies = document.cookie.split(';');
+
+            if (cookies.length == 0) return '';
+
+            for (var i = 0; i < cookies.length; i++) {
+
+                var pair = cookies[i].split('=');
+
+                if ($.trim(pair[0]) == name) {
+                    return $.trim(pair[1]);
+                }
+            }
+            return '';
+        }
+        function getPortalState() {
+            var aa = [];
+            for (var i = 0; i < 2; i++) {
+                var cc = [];
+                var panelIndex = $('#pp').portal('getPanels', i);
+                for (var j = 0; j < panelIndex.length; j++) {
+                    cc.push(panelIndex[j].attr("id"));
+                }
+                aa.push(cc.join(','));
+            }
+            // alert(aa.join(':'));
+            return aa.join(':');
+        }
+        function addPanels(state) {
+
+            var columns = state.split(':');
+            var count = 0;
+            var deptid = "";
+            for (var i = 0; i < columns.length; i++) {
+                var cc = columns[i].split(',');
+                for (var j = 0; j < cc.length; j++) {
+                    var options = getPanelOptions(cc[j]);
+                    if (options) {
+                        var p = $("<div>/").attr("id", options.id).appendTo("body");
+                       //if (options.id == "p1") {
+                       //     deptid = "1";
+                       // } else if (options.id == "p2") {
+                       //     deptid = "4";
+                       // } else if (options.id == "p3") {
+                       //     deptid = "3";
+                       // }
+                       // else if (options.id == "p4") {
+                       //     deptid = "5";
+                       // }+ "&orderid=" + count
+                       // var url = "/home/ShowList?deptid=" + deptid ;
+                       // options.href = url;
+                       // count++;
+                        p.panel(options);
+                        $("#pp").portal('add', {
+                            panel: p,
+                            columnIndex: i
+                        })
+                    }
+                }
+            }
+        }
+
+        var setting = {
+            view: {
+                fontCss: { 'font-weight': 'bold' },
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pid"
+                }
+            },
+            callback: {
+                onClick: treeClick
+            }
+        };
+
+        function treeClick(event, treeId, treeNode, flag) {
+            var path = "/home/DirectoryInfo?dirid=" + treeNode.id; 
+          //  alert(path + "---" + treeId);
+           addTab(treeNode.name, path);
+            //alert(treeNode.name);
+           
+        }
+
+        function getTree() {
+            $.getJSON("/home/getTree", function (data) {
+                if (data.rows.length > 0) {
+                    $.fn.zTree.init($("#treeDemo"), setting, data.rows);
+                }
+            });
+           
+           // treeObj.expandAll(true);
+        }
+
+        $(function () {
+            $("#pp").portal({
+                fit: true,
+                border: false,
+                onStateChange: function () {
+                    var state = getPortalState();
+                    var date = new Date();
+                    date.setTime(date.getTime() + 24 * 3600 * 1000);
+                    document.cookie = 'portal-state=' + state + ';expires=' + date.toGMTString();
+                }
+
+            });
+
+            var state = getcookie('portal-state');
+            if (!state) {
+                state = "p1,p2:p3,p4";
+            }
+            addPanels(state);
+            $('#pp').portal('resize'); 
+
+            getTree();
+            setTimeout(function () {
+                treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                treeObj.expandAll(true);
+            }, 300);
+           // treeObj.expandAll(true);
+           // alert(treeObj);
+        })
+    </script>
+</body>
+
+</html>

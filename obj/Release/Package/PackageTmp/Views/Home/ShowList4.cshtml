@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/index.css">
+    <script type="text/javascript" src="~/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery.easyui.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="~/css/common.css" />
+    <script type="text/javascript" src="~/Scripts/locale/easyui-lang-zh_CN.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <style>
+        .datagrid-header {
+            background: -webkit-gradient(linear, 0 0, 100% 100%, from(#75C7EE), to(#2EA7D0));
+            visibility: hidden
+        }
+    </style>
+</head>
+<body>
+
+    <table class="easyui-datagrid" data-options="collapsible:false" id="userTab3"></table>
+
+
+
+    <script type="text/javascript">
+$(function () {
+    var actionUrl = "/home/GetShowList?deptid=" + @ViewBag.deptid;
+    $("#userTab3").datagrid({
+        url: actionUrl,
+        width: '98%',
+        height: '98%',
+        rownumbers: true,
+        striped: true,
+        fit: true,
+        fitColumns: true,
+        columns: [[
+            { field: 'filename', title: '文件名称', width: 150 },
+            { field: 'keyword', title: '关键字', width: 150 },
+            { field: 'username', title: '创建人', width: 150 },
+            {
+                field: 'viewdir', title: '预览', width: 150, formatter: function (value, row, index) {
+                    if (row.viewmode == "3") {
+                        return "";
+                    } else if (row.viewmode == "1") {
+                        var myurl = "/home/pdfobject?fileid=" + row.keyid;
+                        return "<a href='javascript:showS(\"" + row.filename + "\",\"" + myurl + "\")'>预览</a>";
+                    } else {
+                        return "<a href='/" + row.viewdir + "' target='_blank'>预览</a>";
+                    }
+                }
+            },
+            {
+                field: 'keyid', title: '', width: 150, formatter: function (value, row, index) {
+                    return "<a href='/home/DownFile?fileid=" + value + "'>下载</a>";
+                }
+            }
+        ]]
+
+
+    })
+
+});
+    </script>
+</body>
+</html>

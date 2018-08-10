@@ -1,0 +1,56 @@
+﻿
+<form id="FMCGForm">
+    <script>
+        function show() {
+            //alert("oks");
+            var path = $("#file1").filebox("getValue");
+            var f = document.getElementById("filebox_file_id_1").files[0]; //document.getElementById("_easyui_textbox_input3");
+            alert(path);
+            alert("size:" + f.size);
+        }
+    </script>   
+    
+    <table class="grid" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td>
+                文件名：
+            </td>
+            <td>
+                <input class="txt03 easyui-validatebox" id="filename" data-options="required:true,missingMessage:'请输入名称！'" />
+                <input type="hidden" id="h_option" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                关键字：
+            </td>
+            <td>
+                <input class="txt03 easyui-validatebox" id="keyword" data-options="required:true,missingMessage:'请输入关键字，如果有多个请用逗号分隔！'" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                是否公开：
+            </td>
+            <td>
+                <input class="txt03" id="ispublic" type="checkbox" value="是否公开" checked="checked" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                上传文件：
+            </td>
+            <td>
+                <input class="easyui-filebox" name="file1" id="file1" data-options="buttonText:'选择文件'" />
+            </td>
+        </tr>
+        <tr id="bbs">
+            <td colspan="2">
+                <div id="progressFile" class="easyui-progressbar" style="width:100%;"></div>
+            </td>
+
+        </tr>
+        
+    </table>
+    
+</form>

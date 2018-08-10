@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试</title>
+    <link href="jquery.zsign.css" rel="stylesheet" type="text/css" />
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="jquery.zsign.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="test" style="position: relative; width: 80%; height: 400px; border: 1px solid red;
+        margin: 100px auto">
+        <div style="text-align: center; font-size: 30px; font-weight: bold">
+            jQuery模拟签章插件</div>
+        <p>
+            可以内嵌在各种容器中，已包装成jQuery插件，调用方便。点击“盖章”按钮添加一个新章，可以自由拖动位置，点击确定后保存并触发回调函数方便处理保存，有需要的下载试试。</p>
+        <p>
+            可以内嵌在各种容器中，已包装成jQuery插件，调用方便。点击“盖章”按钮添加一个新章，可以自由拖动位置，点击确定后保存并触发回调函数方便处理保存，有需要的下载试试。</p>
+        <p>
+            可以内嵌在各种容器中，已包装成jQuery插件，调用方便。点击“盖章”按钮添加一个新章，可以自由拖动位置，点击确定后保存并触发回调函数方便处理保存，有需要的下载试试。</p>
+        <div style="margin-left: 60%;">
+            盖章：</div>
+    </div>
+    <ul id="msg">
+    </ul>
+    <script>
+        var a = $("#test").zSign({ img: '1.png', isPercentage:true,callBack: function (obj) {
+            var html = [];
+            for (var i = 0; i < obj.length; i++) {
+                html.push('<li>img:"' + obj[i].img + '", top:"' + obj[i].top + '", left:"' + obj[i].left + '"</li>');
+            }
+            $('#msg').html(html.join(''));
+        }
+        });
+    // a.init([{ img: "url(bitbug_favicon.ico)", top: "136px", left: "522px" }, { img: "url(bitbug_favicon.ico)", top: "34.25%", left: "72.3170731707317%"}]);
+    </script>
+</body>
+</html>

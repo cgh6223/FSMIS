@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="~/scripts/themes/default/index.css">
+    <script type="text/javascript" src="~/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery.easyui.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="~/css/common.css" />
+    <script type="text/javascript" src="~/Scripts/locale/easyui-lang-zh_CN.js"></script>
+
+   
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    
+    <style>
+        .datagrid-toolbar, .datagrid-pager {
+            background: -webkit-gradient(linear, 0 0, 100% 100%, from(#75C7EE), to(#2EA7D0));
+        }       
+    </style>
+</head>
+<body>
+    <input type="hidden" id="h_id" value="@ViewBag.id" />
+    <table class="easyui-datagrid" data-options="collapsible:false" id="userTab"></table>
+
+    <div id="tb">
+        <a href="#" id="a_del" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"></a>
+        <a href="#" id="a_edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"></a>
+        <a href="#" id="a_add" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"></a>
+        <a href="#" id="a_down" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true"></a>
+        <div style="float: right; margin-right: 10px; margin-top: 3px;">
+            <input id="ss" class="easyui-searchbox" style="width: 220px" />
+            <div id="searchMenu" style="width: 100px;">
+            </div>
+        </div>
+    </div>    
+
+    <script type="text/javascript" src="~/Scripts/js/Directory.js">
+
+    </script>
+</body>
+</html>
