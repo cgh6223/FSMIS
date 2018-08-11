@@ -24,7 +24,7 @@ $.fn.zSign = function (options) {
     };
  
     //按钮面板
-    var _btnPanel = $("<div class='panel'><button class='btn add' >盖 章</button><button class='btn save'>保 存</button><button class='btn print'>打 印</button></div>").appendTo(_parent);
+    var _btnPanel = $("<div class='panel'><button class='btn add' >盖 章</button><button class='btn save'>保 存</button></div>").appendTo(_parent);
     _btnPanel.css('display', _s.btnPanel ? 'block' : 'none');
  
     //添加
@@ -37,9 +37,9 @@ $.fn.zSign = function (options) {
         handle.save();
     });
  //打印
-    $('.print', _btnPanel).click(function () {
-        handle.print();
-    });
+    // $('.print', _btnPanel).click(function () {
+    //     handle.print();
+    // });
     if (_s.list) {
         handle.init(_s.list);
     }
